@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo $#
+
+[ $# -ge 1 ] && format=$1 || format='echo %s'
+shift
+[ $# -ge 1 ] && result=$1 || result='echo %s'
+shift
+
+rofi -modi cmd -show cmd -no-show-match -no-sort "$@" -cmd-format "$format" -cmd-result "$result"
