@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo $#
-
 [ $# -ge 1 ] && format=$1 || format='echo %s'
 shift
 [ $# -ge 1 ] && result=$1 || result='cat'
