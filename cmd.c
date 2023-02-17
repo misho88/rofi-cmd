@@ -56,7 +56,7 @@ int
 cmd_contains_directive(const char * format)
 {
 	if (format[0] == '\0') return 0;
-	if (format[0] == '%') return format[1] != '%';
+	if (format[0] == '%') return format[1] != '%' ? 1 : cmd_contains_directive(format + 2);
 	return cmd_contains_directive(format + 1);
 }
 
@@ -122,7 +122,8 @@ cmd_get_display_value(const Mode * mode, unsigned int selected_line, int * state
 	if (selected_line == 0) return g_strdup(data->command);
 
 	int i = selected_line - 1;
-	int len = data->lines[i + 1] - data->lines[i] - 1;
+	int len = data->lines[i + 1] - data->lines[i];
+	len -= data->lines[i][len - 1] == '\n';
 	return g_strdup_printf("%.*s", len, data->lines[i]);
 }
 
@@ -178,7 +179,7 @@ cmd_subprocess_callback(GSubprocess * subprocess, GAsyncResult * result, Mode * 
 			data->lines[i++] = c + 1;
 		}
 	}
-	data->lines[i++] = c;
+	data->lines[i++] = c++;
 	rofi_view_reload();
 }
 
